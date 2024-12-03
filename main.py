@@ -262,6 +262,7 @@ def get_info_tweet_reports(list_acc_check):
         "responsive_web_enhance_cards_enabled": False
     }
 
+    global list_user
     
     acc_check = random.choice(list_acc_check)
     # Tham số cho request (bao gồm variables và features)
@@ -297,6 +298,12 @@ def get_info_tweet_reports(list_acc_check):
                 continue
             for entry in data["data"]["search_by_raw_query"]["search_timeline"]["timeline"]["instructions"][0]["entries"]:
                 try:
+                    #content itemContent tweet_results result core user_results result legacy screen_name 
+                    username = entry["content"]["itemContent"]["tweet_results"]['result']["core"]["user_results"]["result"]['legacy']['screen_name']
+                    print(username)
+                    if username in list_user:
+                        print(f"{username} nằm trong danh sách user, bỏ qua...")
+                        continue
                     tweet_id = entry["content"]["itemContent"]["tweet_results"]['result']['legacy']['id_str']
                     user_id_reports = entry["content"]["itemContent"]["tweet_results"]['result']['legacy']['user_id_str']
                     if user_id_reports not in info_reports.keys():
@@ -327,6 +334,9 @@ load_settings_from_yml("settings.yml")
 
 with open('acc_check.json', 'r') as file:
     list_acc_check = json.load(file)
+
+with open('user.txt', 'r') as file:
+    list_user = file.readlines()
 
 for acc_check in list_acc_check:
     # thêm một thuộc tính mới vào acc_check
