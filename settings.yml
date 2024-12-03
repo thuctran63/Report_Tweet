@@ -1,0 +1,3 @@
+setting:
+  max_reports_time_per_account: 4 # số lần reports tối đa cho mỗi acc
+  time_scrolls: 5 # số lần scroll tối đa
