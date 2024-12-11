@@ -7,15 +7,19 @@ import yaml
 
 max_report_times = 3
 max_scroll_times = 5
+time_report_per_link = 5
+key = "chudai"
 
 def load_settings_from_yml(file_path):
-    global max_report_times, max_scroll_times
+    global max_report_times, max_scroll_times, time_report_per_link, key
     with open(file_path, 'r', encoding='utf-8') as file:
         settings = yaml.safe_load(file)
         # Truy cập vào mục 'setting' trong YAML
         setting = settings.get('setting', {})
         max_report_times = setting.get('max_report_times', 3)
         max_scroll_times = setting.get('max_scroll_times', 5)
+        time_report_per_link = setting.get('time_report_per_link', 5)
+        key = setting.get('key', 'chudai')
 
 def generate_random_string():
     # Generate random hexadecimal segments
@@ -54,173 +58,145 @@ def find_objects_with_cursor(data, target_key = "cursorType", target_value = "Bo
             results.extend(find_objects_with_cursor(item, target_key, target_value))
     return results
 
-def report_tweet(reported_tweet_id, reported_user_id, list_acc_check):
+def report_tweet(reported_tweet_id, reported_user_id, list_acc_check, time_report_per_link = 5):
     global max_report_times, max_scroll_times
     url = "https://x.com/i/api/1.1/report/flow.json?flow_name=report-flow"
     # Kiểm tra xem có tài khoản nào còn có thể report không
-    while True:
-        # chọn random một tài khoản
-        if len(list_acc_check) == 0:
-            print("All accounts have reached the maximum number of reports.")
-            return
-        acc_check = random.choice(list_acc_check)
-        if acc_check["report_times"] <= max_report_times:
-            acc_check["report_times"] += 1
-            break
-        else:
-            list_acc_check.remove(acc_check)
+    times = 0
+    list_acc_had_reported = []
+    while times < time_report_per_link:
+        while True:
+            # chọn random một tài khoản
             if len(list_acc_check) == 0:
                 print("All accounts have reached the maximum number of reports.")
                 return
+            acc_check = random.choice(list_acc_check)
+            if acc_check["report_times"] < max_report_times and acc_check not in list_acc_had_reported:
+                list_acc_had_reported.append(acc_check)
+                acc_check["report_times"] += 1
+                break
+            else:
+                list_acc_check.remove(acc_check)
 
-    # Headers (đảm bảo rằng bạn có xác thực nếu cần)
-    headers = {
-                "Content-Type": "application/json",
-                "Authorization": acc_check["bearer_token"],  # Bearer token từ tài khoản
-                "x-csrf-token": acc_check["csrf_token"],    # CSRF token từ tài khoản
-                "Cookie": acc_check["cookie"]                # Cookie từ tài khoản
+        # Headers (đảm bảo rằng bạn có xác thực nếu cần)
+        headers = {
+                    "Content-Type": "application/json",
+                    "Authorization": acc_check["bearer_token"],  # Bearer token từ tài khoản
+                    "x-csrf-token": acc_check["csrf_token"],    # CSRF token từ tài khoản
+                    "Cookie": acc_check["cookie"]                # Cookie từ tài khoản
+                    }
+        
+        report_flow_id = generate_random_string()
+        # Payload data
+        payload = {
+        "input_flow_data": {
+            "requested_variant": "{\"client_app_id\":\"3033300\",\"client_location\":\"search:search_filter_top:result\",\"client_referer\":\"/search\",\"is_media\":true,\"is_promoted\":false,\"report_flow_id\":\"{report_flow_id}\",\"reported_tweet_id\":\"{reported_tweet_id}\",\"reported_user_id\":\"{reported_user_id}\",\"source\":\"reporttweet\"}",
+            "flow_context": {
+                "debug_overrides": {},
+                "start_location": {
+                    "location": "search",
+                    "search": {
+                        "query": key,
+                        "social_filter": "all",
+                        "near": "anywhere"
+                    }
                 }
-    
-    report_flow_id = generate_random_string()
-    # Payload data
-    payload = {
-    "input_flow_data": {
-        "requested_variant": "{\"client_app_id\":\"3033300\",\"client_location\":\"search:search_filter_top:result\",\"client_referer\":\"/search\",\"is_media\":true,\"is_promoted\":false,\"report_flow_id\":\"{report_flow_id}\",\"reported_tweet_id\":\"{reported_tweet_id}\",\"reported_user_id\":\"{reported_user_id}\",\"source\":\"reporttweet\"}",
-        "flow_context": {
-            "debug_overrides": {},
-            "start_location": {
-                "location": "search",
-                "search": {
-                    "query": "chudai",
-                    "social_filter": "all",
-                    "near": "anywhere"
-                }
+            }
+        },
+        "subtask_versions": {
+            "action_list": 2,
+            "alert_dialog": 1,
+            "app_download_cta": 1,
+            "check_logged_in_account": 1,
+            "choice_selection": 3,
+            "contacts_live_sync_permission_prompt": 0,
+            "cta": 7,
+            "email_verification": 2,
+            "end_flow": 1,
+            "enter_date": 1,
+            "enter_email": 2,
+            "enter_password": 5,
+            "enter_phone": 2,
+            "enter_recaptcha": 1,
+            "enter_text": 5,
+            "enter_username": 2,
+            "generic_urt": 3,
+            "in_app_notification": 1,
+            "interest_picker": 3,
+            "js_instrumentation": 1,
+            "menu_dialog": 1,
+            "notifications_permission_prompt": 2,
+            "open_account": 2,
+            "open_home_timeline": 1,
+            "open_link": 1,
+            "phone_verification": 4,
+            "privacy_options": 1,
+            "security_key": 3,
+            "select_avatar": 4,
+            "select_banner": 2,
+            "settings_list": 7,
+            "show_code": 1,
+            "sign_up": 2,
+            "sign_up_review": 4,
+            "tweet_selection_urt": 1,
+            "update_users": 1,
+            "upload_media": 1,
+            "user_recommendations_list": 4,
+            "user_recommendations_urt": 1,
+            "wait_spinner": 3,
+            "web_modal": 1
             }
         }
-    },
-    "subtask_versions": {
-        "action_list": 2,
-        "alert_dialog": 1,
-        "app_download_cta": 1,
-        "check_logged_in_account": 1,
-        "choice_selection": 3,
-        "contacts_live_sync_permission_prompt": 0,
-        "cta": 7,
-        "email_verification": 2,
-        "end_flow": 1,
-        "enter_date": 1,
-        "enter_email": 2,
-        "enter_password": 5,
-        "enter_phone": 2,
-        "enter_recaptcha": 1,
-        "enter_text": 5,
-        "enter_username": 2,
-        "generic_urt": 3,
-        "in_app_notification": 1,
-        "interest_picker": 3,
-        "js_instrumentation": 1,
-        "menu_dialog": 1,
-        "notifications_permission_prompt": 2,
-        "open_account": 2,
-        "open_home_timeline": 1,
-        "open_link": 1,
-        "phone_verification": 4,
-        "privacy_options": 1,
-        "security_key": 3,
-        "select_avatar": 4,
-        "select_banner": 2,
-        "settings_list": 7,
-        "show_code": 1,
-        "sign_up": 2,
-        "sign_up_review": 4,
-        "tweet_selection_urt": 1,
-        "update_users": 1,
-        "upload_media": 1,
-        "user_recommendations_list": 4,
-        "user_recommendations_urt": 1,
-        "wait_spinner": 3,
-        "web_modal": 1
+
+        # Thay thế {report_flow_id} trong requested_variant
+        payload["input_flow_data"]["requested_variant"] = payload["input_flow_data"]["requested_variant"].replace("{report_flow_id}", report_flow_id)
+        # Thay thế {reported_tweet_id} trong requested_variant
+        payload["input_flow_data"]["requested_variant"] = payload["input_flow_data"]["requested_variant"].replace("{reported_tweet_id}", reported_tweet_id)
+        # Thay thế {reported_user_id} trong requested_variant
+        payload["input_flow_data"]["requested_variant"] = payload["input_flow_data"]["requested_variant"].replace("{reported_user_id}", reported_user_id)
+
+        # Send POST request
+        response = requests.post(url, headers=headers, json=payload)
+        flow_token = None
+        # Output response
+        if response.status_code == 200:
+            print("Request flow 1 successful!")
+            # lấy ra flow_token từ response
+            response_json = response.json()
+            flow_token = response_json["flow_token"]
+        else:
+            print("Failed to send request.")
+            print(f"Status Code: {response.status_code}")
+            print(response.text)
+        
+        url = "https://x.com/i/api/1.1/report/flow.json"
+        payload = {
+            "flow_token": "{flow_token}",
+            "subtask_inputs": [
+                {
+                    "subtask_id": "single-selection",
+                    "choice_selection": {
+                        "link": "next_link",
+                        "selected_choices": [
+                            "SpammedOption"
+                        ]
+                    }
+                }
+            ]
         }
-    }
 
-    # Thay thế {report_flow_id} trong requested_variant
-    payload["input_flow_data"]["requested_variant"] = payload["input_flow_data"]["requested_variant"].replace("{report_flow_id}", report_flow_id)
-    # Thay thế {reported_tweet_id} trong requested_variant
-    payload["input_flow_data"]["requested_variant"] = payload["input_flow_data"]["requested_variant"].replace("{reported_tweet_id}", reported_tweet_id)
-    # Thay thế {reported_user_id} trong requested_variant
-    payload["input_flow_data"]["requested_variant"] = payload["input_flow_data"]["requested_variant"].replace("{reported_user_id}", reported_user_id)
+        # Thay thế {flow_token} trong payload
+        payload["flow_token"] = flow_token
 
-    # Send POST request
-    response = requests.post(url, headers=headers, json=payload)
-    flow_token = None
-    # Output response
-    if response.status_code == 200:
-        print("Request flow 1 successful!")
-        # lấy ra flow_token từ response
-        response_json = response.json()
-        flow_token = response_json["flow_token"]
-    else:
-        print("Failed to send request.")
-        print(f"Status Code: {response.status_code}")
-        print(response.text)
-    
-    url = "https://x.com/i/api/1.1/report/flow.json"
-    payload = {
-        "flow_token": "{flow_token}",
-        "subtask_inputs": [
-            {
-                "subtask_id": "single-selection",
-                "choice_selection": {
-                    "link": "next_link",
-                    "selected_choices": [
-                        "AbusiveBehaviorOption"
-                    ]
-                }
-            }
-        ]
-    }
+        response = requests.post(url, headers=headers, json=payload)
 
-    # Thay thế {flow_token} trong payload
-    payload["flow_token"] = flow_token
-
-    response = requests.post(url, headers=headers, json=payload)
-
-    # Output response
-    if response.status_code == 200:
-        print("Request flow 2 successful!")
-        response_json = response.json()
-        flow_token = response_json["flow_token"]
-    else:
-        print("Failed to send request.")
-        print(f"Status Code: {response.status_code}")
-        print(response.text)
-    
-    payload = {
-        "flow_token": "{flow_token}",
-        "subtask_inputs": [
-            {
-                "subtask_id": "single-selection",
-                "choice_selection": {
-                    "link": "next_link",
-                    "selected_choices": ["UnwantedSexualContentOption"]
-                }
-            }
-        ]
-    }
-
-    # Thay thế {flow_token} trong payload
-    payload["flow_token"] = flow_token
-    
-    response = requests.post(url, headers=headers, json=payload)
-
-    # Output response
-    if response.status_code == 200:
-        print("Request flow 3 successful! Report {} successfully.".format(reported_tweet_id))
-        response_json = response.json()
-    else:
-        print("Failed to send request.")
-        print(f"Status Code: {response.status_code}")
-        print(response.text)
+        # Output response
+        if response.status_code == 200:
+            print(f"Report spam post id {reported_tweet_id} successfully. Số lần report: {times + 1}")
+        else:
+            print("Failed to send request.")
+            print(f"Status Code: {response.status_code}")
+            print(response.text)
 
 def get_info_tweet_reports(list_acc_check):
     global max_report_times, max_scroll_times
@@ -339,7 +315,6 @@ with open('user.txt', 'r') as file:
     list_user = file.readlines()
 
 for acc_check in list_acc_check:
-    # thêm một thuộc tính mới vào acc_check
     acc_check["report_times"] = 0
 
 print("Đang lấy thông tin các tweet cần report...")

@@ -1,7 +1,7 @@
 [
     {
         "bearer_token": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
-        "csrf_token": "b87d3e582dfcd1cb062c911a062b11a72f8581accf07d55ffce336272e5633b742cc702145f54906c85dc2b4e5a4fea0480386a28cf9e574cc90882f7ed471a0d7ce204f2759f1813ecd07c34d02ae04",
-        "cookie": "g_state={\"i_l\":0}; _ga=GA1.2.1905177999.1725814725; kdt=QGS1x02TLy2JfvCmDgkXn340WN3FNDp7TqiQYhKi; twtr_pixel_opt_in=Y; dnt=1; guest_id=v1%3A172276741733646037; night_mode=2; guest_id_marketing=v1%3A172276741733646037; guest_id_ads=v1%3A172276741733646037; auth_token=9cc6a6db25abc81cadbb1a63bfeb3c5f67a4347b; ct0=b87d3e582dfcd1cb062c911a062b11a72f8581accf07d55ffce336272e5633b742cc702145f54906c85dc2b4e5a4fea0480386a28cf9e574cc90882f7ed471a0d7ce204f2759f1813ecd07c34d02ae04; twid=u%3D1444906520890654724; personalization_id=\"v1_uGkWn8R5/JKcLQMrBDmuKw==\"; lang=en"
+        "csrf_token": "063350857a0f440cb07a4a19ff18e2c9392c19ca036fee8af7262919bd501c44d002c5c9ba6a48df2430ab5b6fdd5142960b04e0a28f3ac53797e1242021ee106fd82613cc57e21efac37381eb05e670",
+        "cookie": "g_state={\"i_l\":0}; _ga=GA1.2.1905177999.1725814725; twtr_pixel_opt_in=Y; guest_id=v1%3A172276741733646037; night_mode=2; guest_id_marketing=v1%3A172276741733646037; guest_id_ads=v1%3A172276741733646037; kdt=zuhOeOMHDjQD1O906nl1hU3thGphdQ1kSYv9Kt7G; auth_token=1b3aacdbde3f120e2b552f8b269df803214d8fe7; ct0=063350857a0f440cb07a4a19ff18e2c9392c19ca036fee8af7262919bd501c44d002c5c9ba6a48df2430ab5b6fdd5142960b04e0a28f3ac53797e1242021ee106fd82613cc57e21efac37381eb05e670; twid=u%3D1444906520890654724; personalization_id=\"v1_uGkWn8R5/JKcLQMrBDmuKw==\"; lang=en"
     }
 ]
