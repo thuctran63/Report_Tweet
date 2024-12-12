@@ -323,5 +323,5 @@ print("Đã lấy xong thông tin các tweet cần report...")
 print("Đang report các tweet...")
 for reported_user_id, reported_tweet_ids in info_reports.items():
     for reported_tweet_id in reported_tweet_ids:
-        report_tweet(reported_tweet_id, reported_user_id, list_acc_check)
+        report_tweet(reported_tweet_id, reported_user_id, list_acc_check, time_report_per_link)
 
