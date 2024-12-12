@@ -1,5 +1,5 @@
 setting:
-  max_reports_time_per_account: 4 # số lần reports tối đa cho mỗi acc
+  max_reports_time_per_account: 1 # số lần reports tối đa cho mỗi acc
   time_scrolls: 5 # số lần scroll tối đa
   time_report_per_link: 2 # số lần report tối đa cho mỗi link
   key: chudai
