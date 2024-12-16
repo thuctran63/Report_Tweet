@@ -194,7 +194,7 @@ def get_info_tweet_reports(list_acc_check):
 
     # Các tham số variables (được mã hóa dưới dạng JSON)
     variables = {
-        "rawQuery": 'chudai' ,       # Từ khóa tìm kiếm
+        "rawQuery": f'{key}' ,       # Từ khóa tìm kiếm
         "count": 100,          # Số kết quả muốn lấy
         "querySource": "typed_query",  # Nguồn tìm kiếm, có thể là "typed_query" hoặc khác
         "product": "Top"       # Loại sản phẩm tìm kiếm
