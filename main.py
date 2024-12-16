@@ -301,7 +301,7 @@ with open('acc_check.json', 'r') as file:
     list_acc_check = json.load(file)
 
 with open('user.txt', 'r') as file:
-    list_user = file.readlines()
+    list_user = file.read().splitlines()
 
 for acc_check in list_acc_check:
     acc_check["report_times"] = 0
