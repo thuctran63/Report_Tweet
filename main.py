@@ -94,11 +94,11 @@ def report_tweet(reported_tweet_id, reported_user_id, list_acc_check, time_repor
                 "flow_context": {
                     "debug_overrides": {},
                     "start_location": {
-                        "location": "search",
-                        "search": {
-                            "query": key,
-                            "social_filter": "all",
-                            "near": "anywhere"
+                        {
+                            "location": "tweet",
+                            "tweet": {
+                                "tweet_id": f"{reported_tweet_id}"
+                            }
                         }
                     }
                 }
